@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Shopping Cart</title>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                      <li><a href="#">Home</a></li>
+                      <li><a href="#">Products</a></li>
+                      <li><a href="#">About us</a></li>
+                      <li><a href="#">Contact</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+          </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- DISPLAYING WHOLE INFORMATION STARTED-->
+                <div class="container">
+                    <div class="col-md-12">
+                        <h2 style="color: #cc0000; font-size: 16px; padding-left: 1.5rem;">Displaying New Stock</h2>
+                    </div>
+                </div>
+                <!-- DISPLAYING WHOLE INFORMATION ENDED-->
+                
+                <!-- DISPLAYING SELECTED ITEMS STARTED-->
+                <div class="container">
+                    <table class="table table-bordered" id="cart_data">
+                        <tr class="rowitem">
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Units</th>
+                            <th>Total Price</th>
+                            <th>Remove Items</th>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="background: #ccc; color: #000; font-weight: 600;">Final Amount</td>
+                            <td colspan="2" class="final_amnt">&#x20B9;0</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- DISPLAYING SELECTED ITEMS ENDED-->
+            </div>
+        </div>
+    </body>
+      
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var product_data = '';
+            $.ajax({url:"shopping_cart.json", success: function(data){
+                $.each(data, function(key, value){
+                    product_data += '<div class="col-sm-6 col-md-3">',
+
+                    product_data += '<div class="thumbnail"><img class="img-rounded" src=' + value.Image+' alt="'+value.Name+'" >',
+                    //caption parent class
+                    product_data += '<div class="caption text-center"><a href="#" class="more">Specifications</a><h3 class="itemname">' + value.Name+ '</h3> <p class="itemprice">Price: <strong>&#x20B9;</strong>' + value.Price+'</p>',
+
+                    product_data += '<label for="quantity">Quantity</label><input class="form-control quantity unitval" type=number value="1" min="1" aria-label="select required units">',
+
+                    product_data += '<button class="btn btn-primary btn-sm addcart" id="'+value.Id+'"aria-label="Add item to cart">Add to cart&nbsp;<i class="fa fa-shopping-cart"></i></button></div>',
+
+                    product_data += '</div>',
+                    product_data += '</div>'
+                });
+
+                $('.col-md-12').append(product_data);
+            }});
+
+            //TABLE DATA
+            var finalamt = 0;   
+            $(".col-md-12").on("click",".addcart",function(){
+                var table_data = "";
+                    
+                $(this).attr({"disabled":"true"});
+                
+                var price   =   Number($(this).parents(".caption").find(".itemprice").text().substring(8));
+                console.log($(this).siblings(".itemprice").text());
+                var units   =   Number($(this).siblings(".unitval").val());
+                // console.log($(this).siblings(".unitval").val());
+                var total   =   (price * units) ;
+                // console.log(total);
+                finalamt    =   finalamt + total;
+
+                table_data  +=  '<tr class="rowitem"><td>'+$(this).parents(".caption").find(".itemname").text()+'</td>',
+
+                table_data  +=  '<td>&#x20B9;'+$(this).parents(".caption").find(".itemprice").text().substring(8)+'</td>',
+
+                table_data  +=  '<td>'+$(this).parents(".caption").find(".unitval").val()+'</td>',
+
+                table_data  +=  '<td class="amt">&#x20B9;'+total+'</td>',
+                
+                table_data  +=  "<td><button aria-label='delete' type='submit' class='"+$(this).attr("id")+" delbtn btn btn-danger btn-sm'>Remove Items</button></td></tr>";
+
+                $(".final_amnt").html("&#x20B9;"+finalamt); 
+                $("tr.rowitem:last").after(table_data);
+            });
+
+            $("#cart_data").on("click",".delbtn",function() {
+                // console.log($(this));
+                // var idval =( $(this).attr("class")).substring(8);
+                var idval =( $(this).attr("class")).substring(0,1);
+                // console.log(idval);
+                var m = Number(($(".final_amnt").text()).substring(1)) - Number(($(this).parents("td").prev("td.amt").text()).substring(1));
+                $(".final_amnt").html("&#x20B9;"+m);
+
+                if(m == 0){
+                    finalamt = 0;
+                }
+                
+                $("#"+idval).prop('disabled', false);
+                $(this).parents(".rowitem").remove();
+            });
+        });
+    </script>
+</html>

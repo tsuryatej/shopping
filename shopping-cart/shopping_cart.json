@@ -1,0 +1,50 @@
+[   {
+        "Id": "1",
+        "Name": "Apple iPhone 11", 
+        "Price": "64000",
+        "Image": "images/iphone-11.jpeg" 
+    },
+    {
+        "Id": "2",
+        "Name": "Apple iPhone SE", 
+        "Price": "42990",
+        "Image": "images/iphone-se.jpg" 
+    },
+    {
+        "Id": "3",
+        "Name": "Xiaomi Mi 8A Pro", 
+        "Price": "7200",
+        "Image": "images/mi-8A-Pro.jpg" 
+    },
+    {
+        "Id": "4",
+        "Name": "Xiaomi Mi 10", 
+        "Price": "50000",
+        "Image": "images/mi-10.jpg" 
+    },
+    {
+        "Id": "5",
+        "Name": "Redmi Note 7 Pro", 
+        "Price": "15000",
+        "Image": "images/mi-note-7-pro.jpg" 
+    },
+    {
+        "Id": "6",
+        "Name": "Redmi Note 9 Pro 128GB", 
+        "Price": "17000",
+        "Image": "images/mi-note-9-pro.jpg" 
+    },
+    {
+        "Id": "7",
+        "Name": "SAMSUNG Galaxy S20+", 
+        "Price": "78000",
+        "Image": "images/samsung-galaxy-s20-plus.jpg" 
+    },
+    {
+        "Id": "8",
+        "Name": "Xiaomi Mi Note 10 Lite", 
+        "Price": "28490",
+        "Image": "images/xiaomi-mi-note-10-lite-3.jpg" 
+    }
+
+]
